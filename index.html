@@ -10,15 +10,18 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: '#8250F8',
-                        surface: '#F5F3FF'
+                        brand: '#2B2522',
+                        surface: '#FCF6F2',
+                        page: '#F5ECE5',
+                        accent: '#A35D51',
+                        line: '#E8DAD3'
                     }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-gray-50 p-4">
+<body class="bg-page p-4">
   <div id="hero" class="bg-cover bg-center rounded-xl flex items-center justify-center transition-all duration-100" style="background-image: url('hero.jpg'); height: 320px;">
     <h1 class="text-3xl font-bold text-center text-white drop-shadow-lg px-4">My Business Tracker / Control de Mi Negocio</h1>
   </div>
@@ -28,13 +31,13 @@
         <h2>Clients / Clientes</h2>
         <form class="flex flex-col gap-4">
             <label for="client-name">Client name / Nombre del cliente:</label>
-            <input type="text" id="client-name" class="w-full border border-gray-300 rounded-lg p-3">
+            <input type="text" id="client-name" class="w-full border border-line rounded-lg p-3">
             <label for="client-phone">Phone / Teléfono:</label>
-            <input type="tel" id="client-phone" class="w-full border border-gray-300 rounded-lg p-3">
+            <input type="tel" id="client-phone" class="w-full border border-line rounded-lg p-3">
             <label for="client-notes">Notes / Notas:</label>
-            <textarea id="client-notes" class="w-full border border-gray-300 rounded-lg p-3"></textarea>
+            <textarea id="client-notes" class="w-full border border-line rounded-lg p-3"></textarea>
             <button id="add-client-button" class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Add client / Agregar cliente</button>
-            <button id="cancel-client-button" class="hidden w-full bg-gray-500 text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Cancel / Cancelar</button>
+            <button id="cancel-client-button" class="hidden w-full bg-white text-brand border border-line font-bold py-3 px-4 rounded-lg hover:opacity-90">Cancel / Cancelar</button>
             <p id="client-error" class="text-red-600"></p>
         </form>
         <ul id="client-list">
@@ -45,25 +48,25 @@
         <h2>Appointments / Citas</h2>
         <form class="flex flex-col gap-4">
             <label for="appointment-client">Client / Cliente:</label>
-            <input type="text" id="appointment-client" list="client-options" class="w-full border border-gray-300 rounded-lg p-3">
+            <input type="text" id="appointment-client" list="client-options" class="w-full border border-line rounded-lg p-3">
             <datalist id="client-options"></datalist>
 
             <label for="appointment-service">Service / Servicio:</label>
-            <select id="appointment-service" class="w-full border border-gray-300 rounded-lg p-3">
+            <select id="appointment-service" class="w-full border border-line rounded-lg p-3">
                 <option value="">Select a service / Seleccionar un servicio ---</option>
             </select>
 
             <label for="appointment-date">Date / Fecha:</label>
-            <input type="date" id="appointment-date" class="w-full border border-gray-300 rounded-lg p-3">
+            <input type="date" id="appointment-date" class="w-full border border-line rounded-lg p-3">
 
             <label for="appointment-time">Time / Hora:</label>
-            <input type="time" id="appointment-time" class="w-full border border-gray-300 rounded-lg p-3">
+            <input type="time" id="appointment-time" class="w-full border border-line rounded-lg p-3">
 
             <label for="appointment-deposit">Deposit / Depósito:</label>
-            <input type="number" id="appointment-deposit" min="0" step="0.01" class="w-full border border-gray-300 rounded-lg p-3">
+            <input type="number" id="appointment-deposit" min="0" step="0.01" class="w-full border border-line rounded-lg p-3">
 
             <button id="add-appointment-button" class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Add appointment / Agregar cita</button>
-            <button id="cancel-appointment-button" class="hidden w-full bg-gray-500 text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Cancel / Cancelar</button>
+            <button id="cancel-appointment-button" class="hidden w-full bg-white text-brand border border-line font-bold py-3 px-4 rounded-lg hover:opacity-90">Cancel / Cancelar</button>
             <p id="appointment-error" class="text-red-600"></p>
         </form>
         <ul id="appointment-list"></ul>
@@ -73,10 +76,10 @@
         <h2>Stock / Inventario</h2>
         <form class="flex flex-col gap-4">
             <label for="stock-name">Item / Artículo:</label>
-            <input type="text" id="stock-name" class="w-full border border-gray-300 rounded-lg p-3">
+            <input type="text" id="stock-name" class="w-full border border-line rounded-lg p-3">
 
             <label for="stock-quantity">Quantity / Cantidad:</label>
-            <input type="number" id="stock-quantity" min="0" class="w-full border border-gray-300 rounded-lg p-3">
+            <input type="number" id="stock-quantity" min="0" class="w-full border border-line rounded-lg p-3">
 
             <button id="add-stock-button" class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Add item / Agregar artículo</button>
             <p id="stock-error" class="text-red-600"></p>
@@ -88,14 +91,14 @@
         <h2>Money / Dinero</h2>
         <form class="flex flex-col gap-4">
                 <label for="service-select">Quick-select a service / Seleccionar servicio:</label>
-    <select id="service-select" class="w-full border border-gray-300 rounded-lg p-3">
+    <select id="service-select" class="w-full border border-line rounded-lg p-3">
         <option value="">Select a service / Seleccionar un servicio ---</option>
     </select>
             <label for="money-description">Description / Descripción:</label>
-            <input type="text" id="money-description" class="w-full border border-gray-300 rounded-lg p-3">
+            <input type="text" id="money-description" class="w-full border border-line rounded-lg p-3">
 
             <label for="money-amount">Amount / Cantidad ($):</label>
-            <input type="number" id="money-amount" min="0" step="0.01" class="w-full border border-gray-300 rounded-lg p-3">
+            <input type="number" id="money-amount" min="0" step="0.01" class="w-full border border-line rounded-lg p-3">
             <button id="add-money-button" class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Add Transaction / Agregar Transacción</button>
             <p id="money-error" class="text-red-600"></p>
         </form>
@@ -107,10 +110,10 @@
         <h2>Expenses / Gastos</h2>
         <form class="flex flex-col gap-4">
             <label for="expense-description">Description / Descripción:</label>
-            <input type="text" id="expense-description" class="w-full border border-gray-300 rounded-lg p-3">
+            <input type="text" id="expense-description" class="w-full border border-line rounded-lg p-3">
 
             <label for="expense-amount">Amount / Monto ($):</label>
-            <input type="number" id="expense-amount" min="0" step="0.01" class="w-full border border-gray-300 rounded-lg p-3">
+            <input type="number" id="expense-amount" min="0" step="0.01" class="w-full border border-line rounded-lg p-3">
             <button id="add-expense-button" class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Add Expense / Agregar Gasto</button>
             <p id="expense-error" class="text-red-600"></p>
         </form>
@@ -176,6 +179,12 @@
             }
             return { name: client };
         });
+        clients.forEach(function (client, index) {
+            if(!client.id) {
+                client.id = Date.now() + index;
+            }
+        });
+        localStorage.setItem("clients", JSON.stringify(clients));
         let editingClient = null;
 
         function showClients() {
@@ -184,7 +193,7 @@
 
         clients.forEach(function(client) {
             const newItem = document.createElement("li");
-            newItem.className = "flex justify-between items-center py-2 border-b border-gray-200";
+            newItem.className = "flex justify-between items-center py-2 border-b border-line";
 
             const nameSpan = document.createElement("span");
             nameSpan.textContent = client.name;
@@ -195,7 +204,7 @@
                 phoneLink.textContent = client.phone;
                 phoneLink.href = "https://wa.me/52" + client.phone.replace(/\D/g, "");
                 phoneLink.target = "_blank";
-                phoneLink.className = "text-brand underline";
+                phoneLink.className = "text-accent underline";
                 nameSpan.appendChild(phoneLink);
             }
 
@@ -207,7 +216,7 @@
             }
 
             const clientAppointments = appointments.filter(function(appointment) {
-                return appointment.client === client.name;
+                return appointment.clientId === client.id;
             });
 
             clientAppointments.forEach(function (appointment) {
@@ -221,7 +230,7 @@
 
             const editButton = document.createElement("button");
             editButton.textContent = "Edit / Editar";
-            editButton.className = "bg-blue-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
+            editButton.className = "bg-white text-brand border border-line font-bold py-2 px-3 rounded-lg hover:opacity-90";
             editButton.addEventListener("click", function() {
                 nameInput.value = client.name;
                 phoneInput.value = client.phone || "";
@@ -234,10 +243,9 @@
 
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "Delete / Eliminar";
-            deleteButton.className = "bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
+            deleteButton.className = "bg-white text-red-700 border border-line font-bold py-2 px-3 rounded-lg hover:opacity-90";
             deleteButton.addEventListener("click", function(){
                 if (confirm("Delete this client? / ¿Eliminar este cliente?")) {
-                    //newItem.remove();
                     const index = clients.indexOf(client);
                     clients.splice(index, 1);
                     localStorage.setItem("clients", JSON.stringify(clients));
@@ -266,12 +274,10 @@
 
                 if (editingClient !== null) {
                     const index = clients.indexOf(editingClient);
-                    clients[index] = { name: name, phone: phoneInput.value, notes: notesInput.value };
+                    clients[index] = { id: editingClient.id, name: name, phone: phoneInput.value, notes: notesInput.value };
                     localStorage.setItem("clients", JSON.stringify(clients));
 
                     showClients();
-
-                    //editingClient.textContent = name;
 
                     editingClient = null;
                     addButton.textContent = "Add client / Agregar cliente";
@@ -280,45 +286,11 @@
                     phoneInput.value = "";
                     notesInput.value = "";
                 } else {
-                    clients.push({ name: name, phone: phoneInput.value, notes: notesInput.value });
+                    clients.push({ id: Date.now(), name: name, phone: phoneInput.value, notes: notesInput.value });
                     localStorage.setItem("clients", JSON.stringify(clients));
 
                     showClients();
-
-                    /*console.log(clients);
-
-                    const newItem = document.createElement("li");
-                    newItem.className = "flex justify-between items-center py-2 border-b border-gray-200";
-
-                    const nameSpan = document.createElement("span");
-                    nameSpan.textContent = name;
-                    newItem.appendChild(nameSpan);
-
-                    const editButton = document.createElement("button");
-                    editButton.textContent = "Edit / Editar";
-                    editButton.className = "bg-blue-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
-                    editButton.addEventListener("click", function() {
-                        nameInput.value = nameSpan.textContent;
-                        editingClient = nameSpan;
-                        addButton.textContent = "Update client / Actualizar cliente";
-                    });
-                    newItem.appendChild(editButton);
-
-                    const deleteButton = document.createElement("button");
-                    deleteButton.textContent = "Delete / Eliminar";
-                    deleteButton.className = "bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
-                    deleteButton.addEventListener("click", function(){
-                        if (confirm("Delete this client? / ¿Eliminar este cliente?")) {
-                            newItem.remove();
-                            const index = clients.indexOf(nameSpan.textContent);
-                            clients.splice(index, 1);
-                            localStorage.setItem("clients", JSON.stringify(clients));
-                        }
-                    });
-                    newItem.appendChild(deleteButton);
-
-                    clientList.appendChild(newItem);
-                  */  
+ 
                     nameInput.value = "";
 
                     phoneInput.value = "";
@@ -352,6 +324,17 @@
         const appointmentList = document.getElementById("appointment-list");
         const appointmentError = document.getElementById("appointment-error");
         let appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+        appointments.forEach(function (appointment) {
+            if (appointment.client && !appointment.clientId) {
+                const savedClient = clients.find(function (client) {
+                    return client.name === appointment.client;
+                });
+                if (savedClient) {
+                    appointment.clientId = savedClient.id;
+                }
+            }
+        });
+        localStorage.setItem("appointments", JSON.stringify(appointments));
         let editingAppointment = null;
 
         function appointmentText(appointment) {
@@ -417,18 +400,18 @@
                 if (line.client && line.date !== lastDate) {
                     const dayHeading = document.createElement("li");
                     dayHeading.textContent = formatDay(line.date);
-                    dayHeading.className = "font-bold text-brand pt-4";
+                    dayHeading.className = "font-bold text-accent pt-4";
                     appointmentList.appendChild(dayHeading);
                     lastDate = line.date;
                 }
 
             const newAppointmentItem = document.createElement("li");
             newAppointmentItem.textContent = text;
-            newAppointmentItem.className = "flex flex-wrap gap-2 justify-between items-center py-2 border-b border-gray-200";
+            newAppointmentItem.className = "flex flex-wrap gap-2 justify-between items-center py-2 border-b border-line";
 
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "Delete / Eliminar";
-            deleteButton.className = "bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
+            deleteButton.className = "bg-white text-red-700 border border-line font-bold py-2 px-3 rounded-lg hover:opacity-90";
 
 
             deleteButton.addEventListener("click", function(){
@@ -457,12 +440,12 @@
                 remindLink.textContent = "Remind / Recordar";
                 remindLink.href = "https://wa.me/" + number +"?text=" + encodeURIComponent(reminderText(line));
                 remindLink.target = "_blank";
-                remindLink.className = "ml-auto mr-2 bg-green-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
+                remindLink.className = "ml-auto mr-2 bg-accent text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
                 newAppointmentItem.appendChild(remindLink);
 
                 const editButton = document.createElement("button");
                 editButton.textContent = "Edit / Editar";
-                editButton.className = "mr-2 bg-blue-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
+                editButton.className = "mr-2 bg-white text-brand border border-line font-bold py-2 px-3 rounded-lg hover:opacity-90";
                 editButton.addEventListener("click", function() {
                     appointmentClientInput.value = line.client;
                     appointmentServiceInput.value = line.service;
@@ -523,9 +506,16 @@
                         return;
                     }
                 }
-
+                const savedClient = clients.find(function (item) {
+                    return item.name === client;
+                });
+                let clientId = null;
+                if (savedClient) {
+                    clientId = savedClient.id;
+                }
                 const appointment = {
                     client: client,
+                    clientId: clientId,
                     service: service,
                     date: date,
                     start: time,
@@ -536,46 +526,8 @@
                 let depositText;
                 if (editingAppointment === null && deposit !== "" && parseFloat(deposit) > 0) {
                     depositText = "Deposit / Deposito: $" + parseFloat(deposit).toFixed(2);
-
-                    /* const depositMoneyItem = document.createElement("li");
-                    depositMoneyItem.textContent = "Deposit / Deposito - " + client + " - $" + parseFloat(deposit).toFixed(2);
-                    depositMoneyItem.className = "flex justify-between items-center py-2 border-b border-gray-200";
-
-
-                    const depositDeleteButton = document.createElement("button");
-                    depositDeleteButton.textContent = "Delete / Eliminar";
-                    depositDeleteButton.className = "bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
-
-                    depositDeleteButton.addEventListener("click", function(){
-                        if (confirm("Delete this deposit? / ¿Eliminar este depósito?")) {
-                            depositMoneyItem.remove();
-
-                            const index = moneyEntries.indexOf("Deposit / Deposito - " + client + " - $" + parseFloat(deposit).toFixed(2));
-                            moneyEntries.splice(index, 1);
-                            localStorage.setItem("money", JSON.stringify(moneyEntries));
-
-                            totalIncome -= parseFloat(deposit);
-                            localStorage.setItem("totalIncome", totalIncome);
-                            totalIncomeDisplay.textContent = totalIncome.toFixed(2);
-
-                            updateProfit();
-                        }
-                    });
-
-                    moneyList.appendChild(depositMoneyItem);
-
-                    depositMoneyItem.appendChild(depositDeleteButton);
-                    */
                     moneyEntries.push({ description: "Deposit / Deposito - " + client, amount: parseFloat(deposit) });
                     localStorage.setItem("money", JSON.stringify(moneyEntries));
-
-                    /* totalIncome += parseFloat(deposit);
-                    localStorage.setItem("totalIncome", totalIncome);
-                    totalIncomeDisplay.textContent = totalIncome.toFixed(2);
-
-                    updateProfit();
-
-                    showMoney();*/
 
                     showMoney();
                     updateProfit();
@@ -639,18 +591,6 @@
             const quantity = parts.pop();
             return { name: parts.join(" - "), quantity: parseInt(quantity) || 0 };
         });
-        let editingStockSpan = null;
-
-        // stockItem.foreach(function (item){
-            // const parts = item.split(" - ");
-            // const itemName = parts[0];
-            // const quantity = parts[1];
-
-            // const newStockItem = document.createElement("li");
-            // newStcokItem.className = "flex justify-between items-center py-2 border-b border-gray-200";
-
-            // const itemSpan =
-        // })
 
         function showStock() {
             stockList.textContent = "";
@@ -658,7 +598,7 @@
         stockItems.forEach(function (item) {
             const newStockItem = document.createElement("li");
             newStockItem.textContent = item.name + " - " + item.quantity;
-            newStockItem.className = "flex justify-between items-center py-2 border-b border-gray-200";
+            newStockItem.className = "flex justify-between items-center py-2 border-b border-line";
             if (item.quantity < lowStockThreshold) {
                 newStockItem.textContent += " ⚠️ Low stock! / ¡Inventario bajo!";
                 newStockItem.style.color = "red";
@@ -666,11 +606,10 @@
 
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "Delete / Eliminar";
-            deleteButton.className = "bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
+            deleteButton.className = "bg-white text-red-700 border border-line font-bold py-2 px-3 rounded-lg hover:opacity-90";
 
             deleteButton.addEventListener("click", function() {
                 if (confirm("Delete this stock item? / ¿Eliminar este artículo de inventario?")) {
-                // newStockItem.remove();
 
                     const index = stockItems.indexOf(item);
                     stockItems.splice(index, 1);
@@ -697,34 +636,7 @@
                 localStorage.setItem("stock", JSON.stringify(stockItems));
 
                 showStock();
-/*
-                const newStockItem = document.createElement("li");
-                newStockItem.textContent = itemName + " - " + quantity;
-                newStockItem.className = "flex justify-between items-center py-2 border-b border-gray-200";
 
-                const deleteButton = document.createElement("button");
-                deleteButton.textContent = "Delete / Eliminar";
-                deleteButton.className = "bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
-
-                deleteButton.addEventListener("click", function(){
-                    if (confirm("Delete this stock item? / ¿Eliminar este artículo de inventario?")) {
-                    newStockItem.remove();
-
-                        const index = stockItems.indexOf(itemName + " - " + quantity);
-                        stockItems.splice(index, 1);
-                        localStorage.setItem("stock", JSON.stringify(stockItems));
-                    }
-                });
-
-            if (parseInt(quantity) < lowStockThreshold) {
-                newStockItem.textContent += " ⚠️ Low stock! / ¡Inventario bajo!";
-                newStockItem.style.color = "red";
-            }
-
-                stockList.appendChild(newStockItem);
-
-                newStockItem.appendChild(deleteButton);
-*/
                 stockNameInput.value = "";
                 stockQuantityInput.value = "";
 
@@ -761,28 +673,18 @@
             totalIncome += entry.amount;
             const newMoneyEntry = document.createElement("li");
             newMoneyEntry.textContent = entry.description + " - $" + entry.amount.toFixed(2);
-            newMoneyEntry.className = "flex justify-between items-center py-2 border-b border-gray-200";
+            newMoneyEntry.className = "flex justify-between items-center py-2 border-b border-line";
 
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "Delete / Eliminar";
-            deleteButton.className = "bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
+            deleteButton.className = "bg-white text-red-700 border border-line font-bold py-2 px-3 rounded-lg hover:opacity-90";
 
             deleteButton.addEventListener("click", function(){
                 if (confirm("Delete this transaction? / ¿Eliminar esta transacción?")) {
-                // newMoneyEntry.remove();
-
                     const index = moneyEntries.indexOf(entry);
                     moneyEntries.splice(index, 1);
                     localStorage.setItem("money", JSON.stringify(moneyEntries));
-                    /*const amountToRemove = entry.amount;
-                    // const amountToRemove = parseFloat(entry.split("$")[1]);
-                    totalIncome -= amountToRemove;
-                    localStorage.setItem("totalIncome", totalIncome);
-                    totalIncomeDisplay.textContent = totalIncome.toFixed(2);
 
-                    updateProfit();
-
-                    showMoney();*/
                     showMoney();
                     updateProfit();
                 }
@@ -802,47 +704,9 @@
             const amount = moneyAmountInput.value;
 
                 if (description !== "" && amount !== "") {
-               /* const newMoneyItem = document.createElement("li");
-                    newMoneyItem.textContent = description + " - $" + parseFloat(amount).toFixed(2);
-                    newMoneyItem.className = "flex justify-between items-center py-2 border-b border-gray-200";
-
-                    const deleteButton = document.createElement("button");
-                    deleteButton.textContent = "Delete / Eliminar";
-                    deleteButton.className = "bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
-
-                    deleteButton.addEventListener("click", function(){
-                        if (confirm("Delete this transaction? / ¿Eliminar esta transacción?")) {
-                        newMoneyItem.remove();
-
-                        const index = moneyEntries.indexOf(description + " - $" + parseFloat(amount).toFixed(2));
-                        moneyEntries.splice(index, 1);
-                        localStorage.setItem("money", JSON.stringify(moneyEntries));
-
-                        const amountToRemove = parseFloat(amount);
-                        totalIncome -= amountToRemove;
-                        localStorage.setItem("totalIncome", totalIncome);
-                        totalIncomeDisplay.textContent = totalIncome.toFixed(2);
-
-                        updateProfit();
-                    }
-                });
-
-                moneyList.appendChild(newMoneyItem);
-
-                newMoneyItem.appendChild(deleteButton);
-                */
 
                 moneyEntries.push({ description: description, amount: parseFloat(amount) });
                 localStorage.setItem("money", JSON.stringify(moneyEntries));
-
-                /* totalIncome += parseFloat(amount);
-                localStorage.setItem("totalIncome", totalIncome);
-                totalIncomeDisplay.textContent = totalIncome.toFixed(2);
-
-                updateProfit();
-
-                showMoney();
-*/
                 
                 showMoney();
                 updateProfit();
@@ -920,11 +784,11 @@
                 totalExpense += entry.amount;
                 const newExpenseItem = document.createElement("li");
                 newExpenseItem.textContent = entry.description + " - $" + entry.amount.toFixed(2);
-                newExpenseItem.className = "flex justify-between items-center py-2 border-b border-gray-200";
+                newExpenseItem.className = "flex justify-between items-center py-2 border-b border-line";
 
                 const deleteButton = document.createElement("button");
                 deleteButton.textContent = "Delete / Eliminar";
-                deleteButton.className = "bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
+                deleteButton.className = "bg-white text-red-700 border border-line font-bold py-2 px-3 rounded-lg hover:opacity-90";
 
                 deleteButton.addEventListener("click", function() {
                     if (confirm("Delete this expense? / ¿Eliminar este gasto?")) {
@@ -937,7 +801,7 @@
                 });
             newExpenseItem.appendChild(deleteButton);
             
-            expenseList.appendChild(newExpenseItem);;
+            expenseList.appendChild(newExpenseItem);
         });
         totalExpenseDisplay.textContent = totalExpense.toFixed(2);
     }
@@ -966,95 +830,6 @@
             }
         });
 
-     /*   expenseEntries.forEach(function (entry) {
-            const newExpenseItem = document.createElement("li");
-            newExpenseItem.className = "flex justify-between items-center py-2 border-b border-gray-200";
-            newExpenseItem.textContent = entry;
-
-            const deleteButton = document.createElement("button");
-            deleteButton.textContent = "Delete / Eliminar";
-            deleteButton.className = "bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
-
-            deleteButton.addEventListener("click", function(){
-                if (confirm("Delete this expense? / ¿Eliminar este gasto?")) {
-                    newExpenseItem.remove();
-
-                    const index = expenseEntries.indexOf(entry);
-                    expenseEntries.splice(index, 1);
-                    localStorage.setItem("expenses", JSON.stringify(expenseEntries));
-
-
-                    const amountToRemove = parseFloat(entry.split("$")[1]);
-                    totalExpense -= amountToRemove;
-                    localStorage.setItem("totalExpense", totalExpense);
-                    totalExpenseDisplay.textContent = totalExpense.toFixed(2);
-
-                    updateProfit();
-                }
-            });
-
-                    expenseList.appendChild(newExpenseItem);
-
-                    newExpenseItem.appendChild(deleteButton);
-
-            });
-        totalExpenseDisplay.textContent = totalExpense.toFixed(2);
-
-        updateProfit();
-
-        addExpenseButton.addEventListener("click", function (event) {
-            event.preventDefault();
-            const description = expenseDescriptionInput.value;
-            const amount = expenseAmountInput.value;
-
-            if (description !== "" && amount !== "") {
-                const newExpenseItem = document.createElement("li");
-                newExpenseItem.textContent = description + " - $" + parseFloat(amount).toFixed(2);
-                newExpenseItem.className = "flex justify-between items-center py-2 border-b border-gray-200";
-
-                const deleteButton = document.createElement("button");
-                deleteButton.textContent = "Delete / Eliminar";
-                deleteButton.className = "bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
-
-                deleteButton.addEventListener("click", function(){
-                    if (confirm("Delete this expense? / ¿Eliminar este gasto?")) {
-                        newExpenseItem.remove();
-
-                        const index = expenseEntries.indexOf(description + " - $" + parseFloat(amount).toFixed(2));
-                        expenseEntries.splice(index, 1);
-                        localStorage.setItem("expenses", JSON.stringify(expenseEntries));
-
-                        const amountToRemove = parseFloat(amount);
-                        totalExpense -= amountToRemove;
-                        localStorage.setItem("totalExpense", totalExpense);
-                        totalExpenseDisplay.textContent = totalExpense.toFixed(2);
-
-                        updateProfit();
-                    }
-                });
-
-                expenseList.appendChild(newExpenseItem);
-
-                newExpenseItem.appendChild(deleteButton);
-
-                expenseEntries.push(description + " - $" + parseFloat(amount).toFixed(2));
-                localStorage.setItem("expenses", JSON.stringify(expenseEntries));
-
-                totalExpense += parseFloat(amount);
-                localStorage.setItem("totalExpense", totalExpense);
-                totalExpenseDisplay.textContent = totalExpense.toFixed(2);
-
-                updateProfit();
-
-                expenseDescriptionInput.value = "";
-                expenseAmountInput.value = "";
-
-                expenseError.textContent = "";
-            } else {
-                expenseError.textContent = "Please enter a description and amount. / Por favor, ingresa una descripción y un monto.";
-            }
-        }); 
-*/
         // ----- Profit -----
         function updateProfit() {
             const profit = totalIncome - totalExpense;
