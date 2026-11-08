@@ -408,6 +408,10 @@
             const newAppointmentItem = document.createElement("li");
             newAppointmentItem.textContent = text;
             newAppointmentItem.className = "flex flex-wrap gap-2 justify-between items-center py-2 border-b border-line";
+            if (line.done) {
+                newAppointmentItem.textContent = "✓ " + text;
+                newAppointmentItem.classList.add("opacity-50");
+            }
 
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "Delete / Eliminar";
@@ -458,6 +462,22 @@
                 });
 
                 newAppointmentItem.appendChild(editButton);
+
+                const isToday = new Date(line.date + "T00:00").getTime() === today.getTime();
+                if (isToday) {
+                    const doneButton = document.createElement("button");
+                    doneButton.textContent = "Done / Terminada";
+                    if (line.done) {
+                        doneButton.textContent = "Undo / Deshacer";
+                    }
+                    doneButton.className = "mr-2 bg-brand text-white font-bold py-2 px-3 rounded-lg hover:opacity-90";
+                    doneButton.addEventListener("click", function () {
+                        line.done = !line.done;
+                        localStorage.setItem("appointments", JSON.stringify(appointments));
+                        showAppointments();
+                    });
+                    newAppointmentItem.appendChild(doneButton);
+                }
 
             }
 
@@ -536,6 +556,7 @@
                 }
                 if (editingAppointment) {
                     const index = appointments.indexOf(editingAppointment);
+                    appointment.done = editingAppointment.done;
                     appointments[index] = appointment;
                     editingAppointment = null;
                     addAppointmentButton.textContent = "Add appointment / Agregar cita";
