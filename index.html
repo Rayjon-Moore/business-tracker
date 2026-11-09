@@ -72,12 +72,26 @@
             <button id="cancel-appointment-button" class="hidden w-full bg-white text-brand border border-line font-bold py-3 px-4 rounded-lg hover:opacity-90">Cancel / Cancelar</button>
             <p id="appointment-error" class="text-red-600"></p>
         </form>
-        <div class="flex items-center justify-between mt-6 mb-3">
-            <button id="previous-month" class="w-10 h-10 rounded-lg border border-line bg-white text-brand font-bold">‹</button>
-            <h3 id="month-title" class="font-bold text-accent text-center"></h3>
-            <button id="next-month" class="w-10 h-10 rounded-lg border border-line bg-white text-brand font-bold">›</button>
+        <div class="flex gap-2 mt-6">
+            <button id="month-view-button" class="flex-1 py-2 rounded-lg font-bold bg-brand text-white">Month / Mes</button>
+            <button id="week-view-button" class="flex-1 py-2 rounded-lg font-bold bg-white text-brand border border-line">Week / Semana</button>
         </div>
-        <div id="calendar" class="grid grid-cols-7 gap-1"></div>
+        <div id="month-view">
+            <div class="flex items-center justify-between mt-3 mb-3">
+                <button id="previous-month" class="w-10 h-10 rounded-lg border border-line bg-white text-brand font-bold">‹</button>
+                <h3 id="month-title" class="font-bold text-accent text-center"></h3>
+                <button id="next-month" class="w-10 h-10 rounded-lg border border-line bg-white text-brand font-bold">›</button>
+            </div>
+            <div id="calendar" class="grid grid-cols-7 gap-1"></div>
+        </div>
+        <div id="week-view" class="hidden">
+            <div class="flex items-center justify-between mt-3 mb-3">
+                <button id="previous-week" class="w-10 h-10 rounded-lg border border-line bg-white text-brand font-bold">‹</button>
+                <h3 id="week-title" class="font-bold text-accent text-center"></h3>
+                <button id="next-week" class="w-10 h-10 rounded-lg border border-line bg-white text-brand font-bold">›</button>
+            </div>
+            <div id="week" class="flex flex-col gap-1"></div>
+        </div>
         <ul id="appointment-list"></ul>
     </section>
 
@@ -333,6 +347,16 @@
         let shownMonth = new Date();
         shownMonth.setDate(1);
         let selectedDate = "";
+        const weekCalendar = document.getElementById("week");
+        const weekTitle = document.getElementById("week-title");
+        const previousWeekButton = document.getElementById("previous-week");
+        const nextWeekButton = document.getElementById("next-week");
+        const monthViewButton = document.getElementById("month-view-button");
+        const weekViewButton = document.getElementById("week-view-button");
+        const monthView = document.getElementById("month-view");
+        const weekView = document.getElementById("week-view");
+        let shownWeek = new Date();
+        shownWeek.setDate(shownWeek.getDate() - (shownWeek.getDay() + 6) % 7);
         const cancelAppointmentButton = document.getElementById("cancel-appointment-button");
         const appointmentClientInput = document.getElementById("appointment-client");
         const appointmentServiceInput = document.getElementById("appointment-service");
@@ -556,6 +580,8 @@
                 appointmentList.appendChild(emptyMessage);
             }
             showCalendar();
+
+            showWeek();
         }
 
         function showCalendar() {
@@ -607,14 +633,74 @@
                 });
 
                 cell.addEventListener("click", function () {
-                    if (selectedDate === cellDate) {
-                        selectedDate = "";
-                    } else {
-                        selectedDate = cellDate;
-                    }
-                    showAppointments();
+                   pickDay(cellDate);
                 });
                 calendar.appendChild(cell);
+            }
+        }
+
+        function pickDay(date) {
+            if (selectedDate === date) {
+                selectedDate = "";
+            } else {
+                selectedDate = date;
+            }
+            showAppointments();
+        }
+
+        function showWeek() {
+            weekCalendar.textContent = "";
+            const now = new Date();
+            const todayString = dateString(now.getFullYear(), now.getMonth(), now.getDate());
+            const english = shownWeek.toLocaleDateString("en-GB", { day: "numeric", month: "long" });
+            const spanish = shownWeek.toLocaleDateString("es-MX", { day: "numeric", month: "long" });
+            weekTitle.textContent = "Week of " + english + " / Semana del " + spanish;
+
+            const dayNames = ["LU", "MA", "MI", "JU", "VI", "SA", "DO"];
+            for (let i = 0; i < 7; i++) {
+                const dayDate = new Date(shownWeek);
+                dayDate.setDate(shownWeek.getDate() + i);
+                const cellDate = dateString(dayDate.getFullYear(), dayDate.getMonth(), dayDate.getDate());
+
+                const row = document.createElement("div");
+                row.className = "flex items-start gap-3 min-h-12 rounded-md border border-line bg-white p-2";
+
+                if (cellDate === todayString) {
+                    row.className = "flex items-start gap-3 min-h-12 rounded-md border-2 border-accent bg-white p-2 text-accent";
+                }
+
+                if (cellDate === selectedDate) {
+                    row.classList.add("ring-2", "ring-brand");
+                }
+                
+                const label = document.createElement("span");
+                label.textContent = dayNames[i] + " " + dayDate.getDate();
+                label.className = "w-12 shrink-0 text-sm font-bold";
+                row.appendChild(label);
+
+                const times = document.createElement("div");
+                times.className = "flex flex-wrap gap-1";
+                const dayAppointments = appointments.filter(function (appointment) {
+                    return appointment.date === cellDate;
+                });
+
+                dayAppointments.forEach(function (appointment) {
+                    const time = document.createElement("span");
+                    time.textContent = appointment.start + " " + clientName(appointment);
+                    time.className = "text-xs rounded px-1.5 py-0.5 bg-accent/10 text-accent";
+
+                    if (appointment.done) {
+                        time.className = "text-xs rounded px-1.5 py-0.5 bg-gray-100 text-gray-400 line-through";
+                    }
+                    times.appendChild(time);
+                });
+                row.appendChild(times);
+
+                row.addEventListener("click", function () {
+                    pickDay(cellDate);
+                });
+
+                weekCalendar.appendChild(row);
             }
         }
 
@@ -631,6 +717,30 @@
             shownMonth.setMonth(shownMonth.getMonth() + 1);
             showCalendar();
         });
+
+        previousWeekButton.addEventListener("click", function () {
+            shownWeek.setDate(shownWeek.getDate() - 7);
+            showWeek();
+        });
+
+        nextWeekButton.addEventListener("click", function () {
+            shownWeek.setDate(shownWeek.getDate() + 7);
+            showWeek();
+        });
+
+        monthViewButton.addEventListener("click", function () {
+            monthView.classList.remove("hidden");
+            weekView.classList.add("hidden");
+            monthViewButton.className = "flex-1 py-2 rounded-lg font-bold bg-brand text-white";
+            weekViewButton.className = "flex-1 py-2 rounded-lg font-bold bg-white text-brand border border-line";
+        });
+
+        weekViewButton.addEventListener("click", function () {
+            weekView.classList.remove("hidden");
+            monthView.classList.add("hidden");
+            weekViewButton.className = "flex-1 py-2 rounded-lg font-bold bg-brand text-white";
+            monthViewButton.className = "flex-1 py-2 rounded-lg font-bold bg-white text-brand border border-line";
+        });    
 
         addAppointmentButton.addEventListener("click", function (event) {
             event.preventDefault();
