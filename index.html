@@ -72,6 +72,12 @@
             <button id="cancel-appointment-button" class="hidden w-full bg-white text-brand border border-line font-bold py-3 px-4 rounded-lg hover:opacity-90">Cancel / Cancelar</button>
             <p id="appointment-error" class="text-red-600"></p>
         </form>
+        <div class="flex items-center justify-between mt-6 mb-3">
+            <button id="previous-month" class="w-10 h-10 rounded-lg border border-line bg-white text-brand font-bold">‹</button>
+            <h3 id="month-title" class="font-bold text-accent text-center"></h3>
+            <button id="next-month" class="w-10 h-10 rounded-lg border border-line bg-white text-brand font-bold">›</button>
+        </div>
+        <div id="calendar" class="grid grid-cols-7 gap-1"></div>
         <ul id="appointment-list"></ul>
     </section>
 
@@ -320,6 +326,12 @@
 
         // ----- Appointment ------
         const addAppointmentButton = document.getElementById("add-appointment-button");
+        const calendar = document.getElementById("calendar");
+        const monthTitle = document.getElementById("month-title");
+        const previousMonthButton = document.getElementById("previous-month");
+        const nextMonthButton = document.getElementById("next-month");
+        let shownMonth = new Date();
+        shownMonth.setDate(1);
         const cancelAppointmentButton = document.getElementById("cancel-appointment-button");
         const appointmentClientInput = document.getElementById("appointment-client");
         const appointmentServiceInput = document.getElementById("appointment-service");
@@ -331,7 +343,7 @@
         const extraServices = document.getElementById("extra-services");
         const addServiceButton = document.getElementById("add-service-button");
         let appointments = JSON.parse(localStorage.getItem("appointments")) || [];
-        appointments.forEach(function (appointment) {
+        appointments.forEach(function (appointment, index) {
             if (appointment.client && !appointment.clientId) {
                 const savedClient = clients.find(function (client) {
                     return client.name === appointment.client;
@@ -344,6 +356,10 @@
             if (appointment.client && !appointment.services) {
                 appointment.services = [appointment.service];
                 delete appointment.service;
+            }
+
+            if (appointment.client && !appointment.id) {
+                appointment.id = Date.now() + index;
             }
         });
         localStorage.setItem("appointments", JSON.stringify(appointments));
@@ -385,6 +401,18 @@
             const english = dateObject.toLocaleDateString("en-GB", options);
             const spanish = dateObject.toLocaleDateString("es-MX", options);
             return english + " / " + spanish;
+        }
+
+        function dateString(year, month, day) {
+            let monthPart = month + 1;
+            let dayPart = day;
+            if (monthPart < 10) {
+                monthPart = "0" + monthPart;
+            }
+            if (dayPart < 10) {
+                dayPart = "0" + dayPart;
+            }
+            return year + "-" + monthPart + "-" + dayPart;
         }
 
         function reminderText(appointment) {
@@ -516,11 +544,69 @@
 
             appointmentList.appendChild(newAppointmentItem);
             });
+            showCalendar();
+        }
+
+        function showCalendar() {
+            calendar.textContent = "";
+            const now = new Date();
+            const todayString = dateString(now.getFullYear(), now.getMonth(), now.getDate());
+            const english = shownMonth.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+            const spanish = shownMonth.toLocaleDateString("es-MX", { month: "long" });
+            monthTitle.textContent = english + " / " + spanish;
+
+            const dayNames = ["LU", "MA", "MI", "JU", "VI", "SA", "DO"];
+            dayNames.forEach(function (name) {
+                const heading = document.createElement("div");
+                heading.textContent = name;
+                heading.className = "text-center text-xs font-bold text-gray-500";
+                calendar.appendChild(heading);
+            });
+
+            const blanks = (shownMonth.getDay() + 6) % 7;
+            for (let i = 0; i < blanks; i++) {
+                calendar.appendChild(document.createElement("div"));
+            }
+
+            const daysInMonth = new Date(shownMonth.getFullYear(),shownMonth.getMonth() + 1, 0).getDate();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const cell = document.createElement("div");
+                cell.textContent = day;
+                cell.className = "min-h-16 rounded-md border border-line bg-white p-1 text-xs font-bold flex flex-col gap-0.5";
+                const cellDate = dateString(shownMonth.getFullYear(), shownMonth.getMonth(), day);
+                if (cellDate === todayString) {
+                    cell.className = "min-h-16 rounded-md border-2 border-accent bg-white p-1 text-xs font-bold text-accent flex flex-col gap-0.5";
+                }
+
+                const dayAppointments = appointments.filter(function (appointment) {
+                    return appointment.date === cellDate;
+                });
+                dayAppointments.forEach(function (appointment) {
+                    const time = document.createElement("span");
+                    time.textContent = appointment.start;
+                    time.className = "text-[10px] font-normal text-center rounded bg-accent/10 text-accent";
+                    if (appointment.done) {
+                        time.className = "text-[10px] font-normal text-center rounded bg-gray-100 text-gray-400 line-through";
+                    }
+                    cell.appendChild(time);
+                });
+                calendar.appendChild(cell);
+            }
         }
 
         showAppointments();
 
         showClients();
+
+        previousMonthButton.addEventListener("click", function () {
+            shownMonth.setMonth(shownMonth.getMonth() - 1);
+            showCalendar();
+        });
+
+        nextMonthButton.addEventListener("click", function () {
+            shownMonth.setMonth(shownMonth.getMonth() + 1);
+            showCalendar();
+        });
 
         addAppointmentButton.addEventListener("click", function (event) {
             event.preventDefault();
@@ -574,6 +660,7 @@
                     clientId = savedClient.id;
                 }
                 const appointment = {
+                    id: Date.now(),
                     client: client,
                     clientId: clientId,
                     services: serviceNames,
@@ -596,6 +683,7 @@
                 }
                 if (editingAppointment) {
                     const index = appointments.indexOf(editingAppointment);
+                    appointment.id = editingAppointment.id;
                     appointment.done = editingAppointment.done;
                     appointments[index] = appointment;
                     editingAppointment = null;
