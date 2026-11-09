@@ -332,6 +332,7 @@
         const nextMonthButton = document.getElementById("next-month");
         let shownMonth = new Date();
         shownMonth.setDate(1);
+        let selectedDate = "";
         const cancelAppointmentButton = document.getElementById("cancel-appointment-button");
         const appointmentClientInput = document.getElementById("appointment-client");
         const appointmentServiceInput = document.getElementById("appointment-service");
@@ -442,7 +443,10 @@
             let lastDate = "";
 
             appointments.forEach(function (line) {
-                if (line.client && new Date(line.date + "T00:00") < today) {
+                if (selectedDate !== "" && line.date !== selectedDate) {
+                    return;
+                }
+                if (selectedDate === "" && line.client && new Date(line.date + "T00:00") < today) {
                     return;
                 }
                 let text = line;
@@ -544,6 +548,13 @@
 
             appointmentList.appendChild(newAppointmentItem);
             });
+
+            if (appointmentList.children.length === 0) {
+                const emptyMessage = document.createElement("li");
+                emptyMessage.textContent = "No appointments / Sin citas";
+                emptyMessage.className = "text-gray-500 py-4";
+                appointmentList.appendChild(emptyMessage);
+            }
             showCalendar();
         }
 
@@ -578,6 +589,10 @@
                     cell.className = "min-h-16 rounded-md border-2 border-accent bg-white p-1 text-xs font-bold text-accent flex flex-col gap-0.5";
                 }
 
+                if (cellDate === selectedDate) {
+                    cell.classList.add("ring-2", "ring-brand");
+                }
+
                 const dayAppointments = appointments.filter(function (appointment) {
                     return appointment.date === cellDate;
                 });
@@ -589,6 +604,15 @@
                         time.className = "text-[10px] font-normal text-center rounded bg-gray-100 text-gray-400 line-through";
                     }
                     cell.appendChild(time);
+                });
+
+                cell.addEventListener("click", function () {
+                    if (selectedDate === cellDate) {
+                        selectedDate = "";
+                    } else {
+                        selectedDate = cellDate;
+                    }
+                    showAppointments();
                 });
                 calendar.appendChild(cell);
             }
