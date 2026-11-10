@@ -652,9 +652,17 @@
             weekCalendar.textContent = "";
             const now = new Date();
             const todayString = dateString(now.getFullYear(), now.getMonth(), now.getDate());
-            const english = shownWeek.toLocaleDateString("en-GB", { day: "numeric", month: "long" });
+            const weekEnd = new Date (shownWeek);
+            weekEnd.setDate(shownWeek.getDate() + 6);
+            let startText = shownWeek.toLocaleDateString("es-MX",{ day: "numeric", month: "short" });
+            if (shownWeek.getMonth() === weekEnd.getMonth()) {
+                startText = shownWeek.getDate();
+            }
+            const endText = weekEnd.toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" });
+            weekTitle.textContent = startText + " - " + endText;
+            /*const english = shownWeek.toLocaleDateString("en-GB", { day: "numeric", month: "long" });
             const spanish = shownWeek.toLocaleDateString("es-MX", { day: "numeric", month: "long" });
-            weekTitle.textContent = "Week of " + english + " / Semana del " + spanish;
+            weekTitle.textContent = "Week of " + english + " / Semana del " + spanish;*/
 
             const dayNames = ["LU", "MA", "MI", "JU", "VI", "SA", "DO"];
             for (let i = 0; i < 7; i++) {
@@ -663,36 +671,82 @@
                 const cellDate = dateString(dayDate.getFullYear(), dayDate.getMonth(), dayDate.getDate());
 
                 const row = document.createElement("div");
-                row.className = "flex items-start gap-3 min-h-12 rounded-md border border-line bg-white p-2";
+                row.className = "flex gap-2";
+
+                const badge = document.createElement("div");
+                badge.className = "w-12 shrink-0 rounded-lg flex flex-col items-center justify-center py-2 bg-white border border-line text-brand";
+
+                const times = document.createElement("div");
+                times.className = "flex-1 min-w-0 min-h-14 flex flex-col gap-1 rounded-lg p-1 bg-white/60 border border-line";
 
                 if (cellDate === todayString) {
-                    row.className = "flex items-start gap-3 min-h-12 rounded-md border-2 border-accent bg-white p-2 text-accent";
+                    badge.className = "w-12 shrink-0 rounded-lg flex flex-col items-center justify-center py-2 bg-accent text-white";
+                    times.className = "flex-1 min-w-0 min-h-14 flex flex-col gap-1 rounded-lg p-1 bg-white border-2 border-accent";
                 }
 
                 if (cellDate === selectedDate) {
-                    row.classList.add("ring-2", "ring-brand");
+                    times.classList.add("ring-2", "ring-brand");
                 }
-                
-                const label = document.createElement("span");
-                label.textContent = dayNames[i] + " " + dayDate.getDate();
-                label.className = "w-12 shrink-0 text-sm font-bold";
-                row.appendChild(label);
 
-                const times = document.createElement("div");
-                times.className = "flex flex-wrap gap-1";
+                const dayName = document.createElement("span");
+                dayName.textContent = dayNames[i];
+                dayName.className = "text-xs font-bold";
+                badge.appendChild(dayName);
+
+                const dayNumber = document.createElement("span");
+                dayNumber.textContent = dayDate.getDate();
+                dayNumber.className = "text-xl font-bold leading-none";
+                badge.appendChild(dayNumber);
+                row.appendChild(badge);
+
                 const dayAppointments = appointments.filter(function (appointment) {
                     return appointment.date === cellDate;
                 });
 
+                if (dayAppointments.length === 0) {
+                    const free = document.createElement("span");
+                    free.textContent = "Free / Libre";
+                    free.className = "text-sm text-gray-400 px-2 py-3";
+                    times.appendChild(free);
+                }
+
                 dayAppointments.forEach(function (appointment) {
+                    const block = document.createElement("div");
+                    block.className = "rounded-md px-2 py-1 text-sm bg-white";
+                    if (cellDate === todayString) {
+                        block.className = "rounded-md px-2 py-1 text-sm bg-surface";
+                    }
+
+                    const top = document.createElement("div");
+                    top.className = "flex justify-between gap-2";
+
                     const time = document.createElement("span");
-                    time.textContent = appointment.start + " " + clientName(appointment);
-                    time.className = "text-xs rounded px-1.5 py-0.5 bg-accent/10 text-accent";
+                    time.textContent = appointment.start + "–" + appointment.end;
+                    time.className = "font-bold";
+                    top.appendChild(time);
+
+                    const name = document.createElement("span");
+                    name.textContent = clientName(appointment);
+                    name.className = "truncate";
+                    top.appendChild(name);
+                    block.appendChild(top);
+
+                    const spanishNames = appointment.services.map(function (service) {
+                        return service.split(" / ").pop();
+                    });
+                    const details = document.createElement("div");
+                    details.textContent = spanishNames.join(" + ");
+                    if (appointment.deposit > 0) {
+                        details.textContent += " · Dep. $" + appointment.deposit;
+                    }
+                    details.className = "text-xs text-gray-500 truncate";
+                    block.appendChild(details);
 
                     if (appointment.done) {
-                        time.className = "text-xs rounded px-1.5 py-0.5 bg-gray-100 text-gray-400 line-through";
+                        time.textContent = "✓ " + time.textContent;
+                        block.classList.add("opacity-50");
                     }
-                    times.appendChild(time);
+                    times.appendChild(block);
                 });
                 row.appendChild(times);
 
