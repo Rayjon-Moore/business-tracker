@@ -22,59 +22,66 @@
     </script>
 </head>
 <body class="bg-page p-4">
-  <div id="hero" class="bg-cover bg-center rounded-xl flex items-center justify-center transition-all duration-100" style="background-image: url('hero.jpg'); height: 320px;">
+  <div id="hero" class="relative bg-cover bg-center rounded-xl flex items-center justify-center transition-all duration-100" style="background-image: url('hero.jpg'); height: 320px;">
+    <select id="language-select" class="absolute top-3 right-3 bg-white/90 text-brand font-bold border border-line rounded-lg px-2 py-1">
+       <option value="es">Español</option> 
+       <option value="en">English</option>
+    </select>
     <h1 class="text-3xl font-bold text-center text-white drop-shadow-lg px-4">My Business Tracker / Control de Mi Negocio</h1>
   </div>
     <p><a href="https://wa.me/523318527628?text=Hi!%20can%20I%20book%20an%20appointment." target="_blank">Book via WhatsApp / Reservar por WhatsApp</a></p>
 
     <section class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
-        <h2>Clients / Clientes</h2>
+        <h2 data-text="clients">Clients / Clientes</h2>
         <form class="flex flex-col gap-4">
-            <label for="client-name">Client name / Nombre del cliente:</label>
+            <label for="client-name" data-text="clientName">Client name / Nombre del cliente:</label>
             <input type="text" id="client-name" class="w-full border border-line rounded-lg p-3">
-            <label for="client-phone">Phone / Teléfono:</label>
+            <label for="client-phone" data-text="phone">Phone / Teléfono:</label>
             <input type="tel" id="client-phone" class="w-full border border-line rounded-lg p-3">
-            <label for="client-notes">Notes / Notas:</label>
+            <label for="client-notes" data-text="notes">Notes / Notas:</label>
             <textarea id="client-notes" class="w-full border border-line rounded-lg p-3"></textarea>
-            <button id="add-client-button" class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Add client / Agregar cliente</button>
-            <button id="cancel-client-button" class="hidden w-full bg-white text-brand border border-line font-bold py-3 px-4 rounded-lg hover:opacity-90">Cancel / Cancelar</button>
+            <button id="add-client-button" data-text="addClient" class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Add client / Agregar cliente</button>
+            <button id="cancel-client-button" data-text="cancel" class="hidden w-full bg-white text-brand border border-line font-bold py-3 px-4 rounded-lg hover:opacity-90">Cancel / Cancelar</button>
             <p id="client-error" class="text-red-600"></p>
         </form>
-        <ul id="client-list">
-        </ul>
+        <details class="mt-4">
+            <summary id="clients-summary" class="cursor-pointer bg-white text-brand border border-line font-bold py-2 px-4 rounded-lg">Saved clients / Clientes guardados</summary>
+            <ul id="client-list"></ul>
+        </details>
     </section>
 
     <section class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
-        <h2>Appointments / Citas</h2>
+        <h2 data-text="appointments">Appointments / Citas</h2>
         <form class="flex flex-col gap-4">
-            <label for="appointment-client">Client / Cliente:</label>
+            <label for="appointment-client" data-text="client">Client / Cliente:</label>
             <input type="text" id="appointment-client" list="client-options" class="w-full border border-line rounded-lg p-3">
             <datalist id="client-options"></datalist>
 
-            <label for="appointment-service">Service / Servicio:</label>
+            <label for="appointment-service" data-text="service">Service / Servicio:</label>
+            <input type="search" id="service-search" autocomplete="off" placeholder="🔍 Search service / Buscar servicio" data-placeholder="searchService" class="w-full border border-line rounded-lg p-3">
             <select id="appointment-service" class="service-box w-full border border-line rounded-lg p-3">
-                <option value="">Select a service / Seleccionar un servicio ---</option>
+                <option value="" data-text="selectService">Select a service / Seleccionar un servicio ---</option>
             </select>
 
             <div id="extra-services" class="flex flex-col gap-4 empty:hidden"></div>
-            <button type="button" id="add-service-button" class="w-full bg-white text-brand border border-line font-bold py-2 px-4 rounded-lg hover:opacity-90">+ Add another service / Agregar otro servicio</button>
+            <button type="button" id="add-service-button" data-text="addAnotherService" class="w-full bg-white text-brand border border-line font-bold py-2 px-4 rounded-lg hover:opacity-90">+ Add another service / Agregar otro servicio</button>
 
-            <label for="appointment-date">Date / Fecha:</label>
+            <label for="appointment-date" data-text="date">Date / Fecha:</label>
             <input type="date" id="appointment-date" class="w-full border border-line rounded-lg p-3">
 
-            <label for="appointment-time">Time / Hora:</label>
+            <label for="appointment-time" data-text="time">Time / Hora:</label>
             <input type="time" id="appointment-time" class="w-full border border-line rounded-lg p-3">
 
-            <label for="appointment-deposit">Deposit / Depósito:</label>
+            <label for="appointment-deposit" data-text="deposit">Deposit / Depósito:</label>
             <input type="number" id="appointment-deposit" min="0" step="0.01" class="w-full border border-line rounded-lg p-3">
 
-            <button id="add-appointment-button" class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Add appointment / Agregar cita</button>
-            <button id="cancel-appointment-button" class="hidden w-full bg-white text-brand border border-line font-bold py-3 px-4 rounded-lg hover:opacity-90">Cancel / Cancelar</button>
+            <button id="add-appointment-button" data-text="addAppointment" class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Add appointment / Agregar cita</button>
+            <button id="cancel-appointment-button" data-text="cancel" class="hidden w-full bg-white text-brand border border-line font-bold py-3 px-4 rounded-lg hover:opacity-90">Cancel / Cancelar</button>
             <p id="appointment-error" class="text-red-600"></p>
         </form>
         <div class="flex gap-2 mt-6">
-            <button id="month-view-button" class="flex-1 py-2 rounded-lg font-bold bg-brand text-white">Month / Mes</button>
-            <button id="week-view-button" class="flex-1 py-2 rounded-lg font-bold bg-white text-brand border border-line">Week / Semana</button>
+            <button id="month-view-button" class="flex-1 py-2 rounded-lg font-bold bg-brand text-white" data-text="month">Month / Mes</button>
+            <button id="week-view-button" class="flex-1 py-2 rounded-lg font-bold bg-white text-brand border border-line" data-text="week">Week / Semana</button>
         </div>
         <div id="month-view">
             <div class="flex items-center justify-between mt-3 mb-3">
@@ -92,6 +99,7 @@
             </div>
             <div id="week" class="flex flex-col gap-1"></div>
         </div>
+        <button id="book-day-button" data-text="bookThisDay" class="hidden w-full mt-3 bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Book this day / Agendar este día</button>
         <ul id="appointment-list"></ul>
     </section>
 
@@ -151,6 +159,110 @@
 
 
     <script>
+        // ----- Language -----
+        const languageSelect = document.getElementById("language-select");
+        const language = localStorage.getItem("language") || "es";
+
+        const translations = {
+            en: {
+                // Clients
+                clients: "Clients",
+                savedClients: "Saved Clients",
+                clientName: "Client name",
+                phone: "Phone",
+                notes: "Notes",
+                addClient: "Add client",
+                updateClient: "Update client",
+                cancel: "Cancel",
+                edit: "Edit",
+                delete: "Delete",
+                deleteClientQuestion: "Delete this client?",
+                clientNameError: "Please enter a client name.",
+                // Appointments
+                appointments: "Appointments",
+                client: "Client",
+                service: "Service",
+                searchService: "🔍 Search service",
+                selectService: "Select a service",
+                addAnotherService: "+ Add another service",
+                date: "Date",
+                time: "Time",
+                deposit: "Deposit",
+                addAppointment: "Add appointment",
+                updateAppointment: "Update appointment",
+                month: "Month",
+                week: "Week",
+                bookThisDay: "Book this day",
+                remind: "Remind",
+                done: "Done",
+                undo: "Undo",
+                noDeposit: "No deposit",
+                noAppointments: "No appointments",
+                free: "Free",
+                deleteAppointmentQuestion: "Delete this appointment?",
+                overlapsWith: "Overlaps with:",
+                addAnyway: "Add it anyway?",
+                appointmentError: "Please fill in client, service, date and time."
+            },
+            es: {
+                clients: "Clientes",
+                savedClients: "Clientes guardados",
+                clientName: "Nombre del cliente",
+                phone: "Teléfono:",
+                notes: "Notas",
+                addClient: "Agregar cliente",
+                updateClient: "Actualizar cliente",
+                cancel: "Cancelar",
+                edit: "Editar",
+                delete: "Eliminar",
+                deleteClientQuestion: "¿Eliminar este cliente?",
+                clientNameError: "Por favor, ingresa el nombre del cliente.",
+                // Appointments
+                appointments: "Citas",
+                client: "Cliente",
+                service: "Servicio",
+                searchService: "🔍 Buscar servicio",
+                selectService: "Seleccionar un servicio",
+                addAnotherService: "+ Agregar otro servicio",
+                date: "Fecha",
+                time: "Hora",
+                deposit: "Depósito",
+                addAppointment: "Agregar cita",
+                updateAppointment: "Actualizar cita",
+                month: "Mes",
+                week: "Semana",
+                bookThisDay: "Agendar este día",
+                remind: "Recordar",
+                done: "Terminada",
+                undo: "Deshacer",
+                noDeposit: "Sin depósito",
+                noAppointments: "Sin citas",
+                free: "Libre",
+                deleteAppointmentQuestion: "¿Eliminar esta cita?",
+                overlapsWith: "Se cruza con:",
+                addAnyway: "¿Agregarla de todos modos?",
+                appointmentError: "Por favor, completa cliente, servicio, fecha y hora."
+            }
+        };
+
+        function t(key) {
+            return translations[language][key];
+        }
+
+        document.querySelectorAll("[data-text]").forEach(function (element) {
+            element.textContent = t(element.dataset.text);
+        });
+
+        document.querySelectorAll("[data-placeholder]").forEach(function (element) {
+            element.placeholder = t(element.dataset.placeholder);
+        });
+        languageSelect.value = language;
+        document.documentElement.lang = language;
+
+        languageSelect.addEventListener("change", function () {
+            localStorage.setItem("language", languageSelect.value);
+            location.reload();
+        });
         // ----- Service catalog -----
         // price in MXN, duration in minutes
         const services = [
@@ -195,6 +307,7 @@
         const notesInput = document.getElementById("client-notes");
         const clientList = document.getElementById("client-list");
         const clientOptions = document.getElementById("client-options");
+        const clientsSummary = document.getElementById("clients-summary");
         let clients = JSON.parse(localStorage.getItem("clients")) || [];
         clients = clients.map(function (client) {
             if (client.name) {
@@ -213,6 +326,7 @@
         function showClients() {
             clientList.textContent = "";
             clientOptions.textContent = "";
+            clientsSummary.textContent = t("savedClients") + " (" + clients.length + ")";
 
         clients.forEach(function(client) {
             const newItem = document.createElement("li");
@@ -252,23 +366,23 @@
             newItem.appendChild(nameSpan);
 
             const editButton = document.createElement("button");
-            editButton.textContent = "Edit / Editar";
+            editButton.textContent = t("edit");
             editButton.className = "bg-white text-brand border border-line font-bold py-2 px-3 rounded-lg hover:opacity-90";
             editButton.addEventListener("click", function() {
                 nameInput.value = client.name;
                 phoneInput.value = client.phone || "";
                 notesInput.value = client.notes || "";
                 editingClient = client;
-                addButton.textContent = "Update client / Actualizar cliente";
+                addButton.textContent = t("updateClient");
                 cancelClientButton.classList.remove("hidden");
             });
             newItem.appendChild(editButton);
 
             const deleteButton = document.createElement("button");
-            deleteButton.textContent = "Delete / Eliminar";
+            deleteButton.textContent = t("delete");
             deleteButton.className = "bg-white text-red-700 border border-line font-bold py-2 px-3 rounded-lg hover:opacity-90";
             deleteButton.addEventListener("click", function(){
-                if (confirm("Delete this client? / ¿Eliminar este cliente?")) {
+                if (confirm(t("deleteClientQuestion"))) {
                     const index = clients.indexOf(client);
                     clients.splice(index, 1);
                     localStorage.setItem("clients", JSON.stringify(clients));
@@ -305,7 +419,7 @@
                     showAppointments();
 
                     editingClient = null;
-                    addButton.textContent = "Add client / Agregar cliente";
+                    addButton.textContent = t("addClient");
                     cancelClientButton.classList.add("hidden");
                     nameInput.value = "";
                     phoneInput.value = "";
@@ -323,14 +437,14 @@
                     notesInput.value = "";
                 }
             } else {
-                clientError.textContent = "Please enter a client name. / Por favor, ingresa el nombre del cliente.";
+                clientError.textContent = t("clientNameError");
             }
         });
 
         cancelClientButton.addEventListener("click", function (event) {
             event.preventDefault();
             editingClient = null;
-            addButton.textContent = "Add client / Agregar cliente";
+            addButton.textContent = t("addClient");
             cancelClientButton.classList.add("hidden");
             nameInput.value = "";
             phoneInput.value = "";
@@ -355,6 +469,7 @@
         const weekViewButton = document.getElementById("week-view-button");
         const monthView = document.getElementById("month-view");
         const weekView = document.getElementById("week-view");
+        const bookDayButton = document.getElementById("book-day-button");
         let shownWeek = new Date();
         shownWeek.setDate(shownWeek.getDate() - (shownWeek.getDay() + 6) % 7);
         const cancelAppointmentButton = document.getElementById("cancel-appointment-button");
@@ -367,6 +482,7 @@
         const appointmentError = document.getElementById("appointment-error");
         const extraServices = document.getElementById("extra-services");
         const addServiceButton = document.getElementById("add-service-button");
+        const serviceSearchInput = document.getElementById("service-search");
         let appointments = JSON.parse(localStorage.getItem("appointments")) || [];
         appointments.forEach(function (appointment, index) {
             if (appointment.client && !appointment.clientId) {
@@ -533,6 +649,7 @@
                 editButton.className = "mr-2 bg-white text-brand border border-line font-bold py-2 px-3 rounded-lg hover:opacity-90";
                 editButton.addEventListener("click", function() {
                     appointmentClientInput.value = clientName(line);
+                    clearServiceSearch();
                     appointmentServiceInput.value = line.services[0];
                     extraServices.textContent = "";
                     line.services.forEach(function (name, index) {
@@ -546,6 +663,7 @@
                     editingAppointment = line;
                     addAppointmentButton.textContent = "Update appointment / Actualizar cita";
                     cancelAppointmentButton.classList.remove("hidden");
+                    appointmentClientInput.scrollIntoView({ block: "center" });
                 });
 
                 newAppointmentItem.appendChild(editButton);
@@ -642,8 +760,10 @@
         function pickDay(date) {
             if (selectedDate === date) {
                 selectedDate = "";
+                bookDayButton.classList.add("hidden");
             } else {
                 selectedDate = date;
+                bookDayButton.classList.remove("hidden");
             }
             showAppointments();
         }
@@ -794,7 +914,13 @@
             monthView.classList.add("hidden");
             weekViewButton.className = "flex-1 py-2 rounded-lg font-bold bg-brand text-white";
             monthViewButton.className = "flex-1 py-2 rounded-lg font-bold bg-white text-brand border border-line";
-        });    
+        });
+        
+        bookDayButton.addEventListener("click", function () {
+            appointmentDateInput.value = selectedDate;
+            appointmentClientInput.scrollIntoView({ block: "center" });
+            appointmentClientInput.focus();
+        });
 
         addAppointmentButton.addEventListener("click", function (event) {
             event.preventDefault();
@@ -888,6 +1014,7 @@
 
                 appointmentClientInput.value = "";
                 appointmentServiceInput.value = "";
+                clearServiceSearch();
                 extraServices.textContent = "";
                 appointmentDateInput.value = "";
                 appointmentTimeInput.value = "";
@@ -907,6 +1034,7 @@
 
             appointmentClientInput.value = "";
             appointmentServiceInput.value = "";
+            clearServiceSearch();
             extraServices.textContent = "";
             appointmentDateInput.value = "";
             appointmentTimeInput.value = "";
@@ -1077,15 +1205,27 @@
 
         // ----- Service select -----
         const serviceSelect = document.getElementById("service-select");
+        function startsWithSearch(name, search) {
+            if (!search) {
+                 return true;
+            }
+        const lowerName = name.toLowerCase();
+        const lowerSearch = search.toLowerCase();
+            return lowerName.startsWith(lowerSearch) || lowerName.includes(" / " + lowerSearch);
+        }
 
-        function fillServiceSelect(select) {
+
+        function fillServiceSelect(select, search) {
+            select.querySelectorAll("optgroup").forEach(function (group) {
+                group.remove();
+            });
             categories.forEach(function (category){
                 const group = document.createElement("optgroup");
                 group.label = category;
                 select.appendChild(group);
 
                 services.forEach(function (service){
-                    if (service.category === category) {
+                    if (service.category === category && startsWithSearch(service.name, search)) {
                         const option = document.createElement("option");
                         option.value = service.name;
                         option.dataset.price = service.price;
@@ -1099,10 +1239,29 @@
                     
                     }
                 });
+                if (group.children.length === 0) {
+                    group.remove();
+                }
             });
         }
         fillServiceSelect(serviceSelect);
         fillServiceSelect(appointmentServiceInput);
+
+        serviceSearchInput.addEventListener("input", function () {
+            const boxes = document.querySelectorAll(".service-box");
+            fillServiceSelect(boxes[boxes.length -1], serviceSearchInput.value);
+        });
+
+        serviceSearchInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+            }
+        });
+
+        function clearServiceSearch() {
+            serviceSearchInput.value = "";
+            fillServiceSelect(appointmentServiceInput);
+        }
 
         serviceSelect.addEventListener("change", function () {
             const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
