@@ -1,0 +1,5 @@
+- t(): It looks up a word by its name in the list for that current language and local storage doesn't hold the words it only remembers what language that needs to picked. t() looks up the word in the code and local storage remembers which one to choose. 
+- clientId: This is used to save a number to each appointment and is used to identify them and link them 
+- Commit and push: If I dont push a commit the verison that was last push will be the only one available until the commited code is finally push. Until then it stays on my computer in my project history. 
+- Save Note: The button would be blank but it would not say undefined. The only time it says undefined is if there is a spelling mistake with variables or functions and if the text is concatrenated (+). It shows a red error in the console.
+- Editing appointment: editing changes the name of the client object but it uses the clientId to find the client object 
