@@ -166,6 +166,8 @@
         const translations = {
             en: {
                 // Clients
+                locale: "en-GB",
+                dayNames: ["MO", "TU", "WE", "TH", "FR", "SA", "SU"],
                 clients: "Clients",
                 savedClients: "Saved Clients",
                 clientName: "Client name",
@@ -205,6 +207,9 @@
                 appointmentError: "Please fill in client, service, date and time."
             },
             es: {
+                // Clients
+                locale: "es-MX",
+                dayNames: ["LU", "MA", "MI", "JU", "VI", "SA", "DO"],
                 clients: "Clientes",
                 savedClients: "Clientes guardados",
                 clientName: "Nombre del cliente",
@@ -275,6 +280,11 @@
             { name: "Facial with dermapan / Facial con dermapan", price: 500, duration: 90, category: "General" },
             { name: "Lash lifting / lifting de pestañas", price: 200, duration: 60, category: "General" },
             { name: "eyebrows / Cejas", price: 200, duration: 60, category: "General" },
+            { name: "Express lashes (cluster) / Pestañas express (de grupo)", price: 200, duration: 60, category: "General" },
+            { name: "Body contouring / Moldeado corporal", price: 300, duration: 90, category: "General" },
+            { name: "Nail removal / Retiro de uñas", price: 100, duration: 60, category: "General" },
+            { name: "Gel removal / Retiro de gel", price: 50, duration: 30, category: "General" },
+            { name: "Nail repair / Arreglar uña", price: 40, duration: 60, category: "General" },
             { name: "Wax eyebrows / Cera en cejas", price: 100, duration: 40, category: "Waxing / Depilation" },
             { name: "Wax mustache / Cera en bigote", price: 100, duration: 30, category: "Waxing / Depilation" },
             { name:"Wax half face", price: 180, duration:30, category: "Waxing / Depilation" },
@@ -539,9 +549,7 @@
         function formatDay(date) {
             const dateObject = new Date(date + "T00:00");
             const options = { weekday: "long", month: "long", day:"numeric"};
-            const english = dateObject.toLocaleDateString("en-GB", options);
-            const spanish = dateObject.toLocaleDateString("es-MX", options);
-            return english + " / " + spanish;
+            return dateObject.toLocaleDateString(t("locale"), options);
         }
 
         function dateString(year, month, day) {
@@ -706,11 +714,9 @@
             calendar.textContent = "";
             const now = new Date();
             const todayString = dateString(now.getFullYear(), now.getMonth(), now.getDate());
-            const english = shownMonth.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
-            const spanish = shownMonth.toLocaleDateString("es-MX", { month: "long" });
-            monthTitle.textContent = english + " / " + spanish;
+            monthTitle.textContent = shownMonth.toLocaleDateString(t("locale"), { month: "long", year: "numeric"});
 
-            const dayNames = ["LU", "MA", "MI", "JU", "VI", "SA", "DO"];
+            const dayNames = t("dayNames");
             dayNames.forEach(function (name) {
                 const heading = document.createElement("div");
                 heading.textContent = name;
@@ -774,17 +780,17 @@
             const todayString = dateString(now.getFullYear(), now.getMonth(), now.getDate());
             const weekEnd = new Date (shownWeek);
             weekEnd.setDate(shownWeek.getDate() + 6);
-            let startText = shownWeek.toLocaleDateString("es-MX",{ day: "numeric", month: "short" });
+            let startText = shownWeek.toLocaleDateString(t("locale"),{ day: "numeric", month: "short" });
             if (shownWeek.getMonth() === weekEnd.getMonth()) {
                 startText = shownWeek.getDate();
             }
-            const endText = weekEnd.toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" });
+            const endText = weekEnd.toLocaleDateString(t("locale"), { day: "numeric", month: "short", year: "numeric" });
             weekTitle.textContent = startText + " - " + endText;
             /*const english = shownWeek.toLocaleDateString("en-GB", { day: "numeric", month: "long" });
             const spanish = shownWeek.toLocaleDateString("es-MX", { day: "numeric", month: "long" });
             weekTitle.textContent = "Week of " + english + " / Semana del " + spanish;*/
 
-            const dayNames = ["LU", "MA", "MI", "JU", "VI", "SA", "DO"];
+            const dayNames = t("dayNames");
             for (let i = 0; i < 7; i++) {
                 const dayDate = new Date(shownWeek);
                 dayDate.setDate(shownWeek.getDate() + i);
