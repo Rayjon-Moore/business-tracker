@@ -1,5 +1,10 @@
 - t(): It looks up a word by its name in the list for that current language and local storage doesn't hold the words it only remembers what language that needs to picked. t() looks up the word in the code and local storage remembers which one to choose. 
 - clientId: This is used to save a number to each appointment and is used to identify them and link them 
 - Commit and push: If I dont push a commit the verison that was last push will be the only one available until the commited code is finally push. Until then it stays on my computer in my project history. 
-- Save Note: The button would be blank but it would not say undefined. The only time it says undefined is if there is a spelling mistake with variables or functions and if the text is concatrenated (+). It shows a red error in the console.
+- Quiet and loud mistake: Quiet: A wrong name inside t(). You will get blank text or undefined when its together with + and no red error. Loud: A spelling mistake in a variable or function name or any list will lead to red errors and the page stops. A misspelled name like: the code runs until that line then stops. A missing comma bracket or quote: nothing in the script runs and the error often points at the next line.
 - Editing appointment: editing changes the name of the client object but it uses the clientId to find the client object 
+- toLocaleDateString: This turns the date into text and the code that is given deciedes which language and wording is to be used and appear on the page. Locale is language and country settings. It is not the location. 
+- Language decision: t("locale") is what decides the language is going to be in because it gives back either es-MX or en-GB or any other language i put in the future. and because there is no day in the list there would no day number. 
+- Option: The error didn't show because the it was inside a function and inside a function it only runs if it is called. 
+- Github summary: Fix ñ in two service names
+- Missign comma: If the comma is missing none of the script runs. The browser reads the script, the before any of it even runs so the browser can't make any sense sense of the missing comma. 
