@@ -268,6 +268,14 @@
             localStorage.setItem("language", languageSelect.value);
             location.reload();
         });
+
+        function localName(name) {
+            const parts = name.split(" / ");
+            if (language === "es") {
+                return parts.pop()
+            }
+            return parts[0]
+        };
         // ----- Service catalog -----
         // price in MXN, duration in minutes
         const services = [
