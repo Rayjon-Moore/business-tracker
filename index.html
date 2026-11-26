@@ -90,6 +90,7 @@
                 <button id="next-month" class="w-10 h-10 rounded-lg border border-line bg-white text-brand font-bold">›</button>
             </div>
             <div id="calendar" class="grid grid-cols-7 gap-1"></div>
+            <p id="month-total" class="mt-3 text-center font-bold text-brand"></p>
         </div>
         <div id="week-view" class="hidden">
             <div class="flex items-center justify-between mt-3 mb-3">
@@ -194,6 +195,7 @@
                 updateAppointment: "Update appointment",
                 month: "Month",
                 week: "Week",
+                monthTotal: "Month total",
                 bookThisDay: "Book this day",
                 remind: "Remind",
                 done: "Done",
@@ -236,6 +238,7 @@
                 updateAppointment: "Actualizar cita",
                 month: "Mes",
                 week: "Semana",
+                monthTotal: "Total del mes",
                 bookThisDay: "Agendar este día",
                 remind: "Recordar",
                 done: "Terminada",
@@ -293,17 +296,17 @@
             { name: "Nail removal / Retiro de uñas", price: 100, duration: 60, category: "General" },
             { name: "Gel removal / Retiro de gel", price: 50, duration: 30, category: "General" },
             { name: "Nail repair / Arreglar uña", price: 40, duration: 60, category: "General" },
-            { name: "Wax eyebrows / Cera en cejas", price: 100, duration: 40, category: "Waxing / Depilation" },
-            { name: "Wax mustache / Cera en bigote", price: 100, duration: 30, category: "Waxing / Depilation" },
-            { name:"Wax half face", price: 180, duration:30, category: "Waxing / Depilation" },
-            { name: "Wax armpit / Cera en axila", price: 100, duration: 30, category: "Waxing / Depilation" },
-            { name: "Wax full arm / Cera en brazo completo", price: 220, duration: 60, category: "Waxing / Depilation" },
-            { name: "Wax half arm / Cera en mitad brazo", price: 150, duration: 60, category: "Waxing / Depilation" },
-            { name: "Wax stomach / Cera en estómago", price: 60, duration: 60, category: "Waxing / Depilation" },
-            { name: "Wax half back / Cera en mitad espalda", price: 150, duration: 60, category: "Waxing / Depilation" },
-            { name: "Wax bikini / Cera en bikini", price: 200, duration: 60, category: "Waxing / Depilation" },
-            { name: "Wax legs / Cera en piernas", price: 320, duration: 90, category: "Waxing / Depilation" },
-            { name: "Wax half leg / Cera en mitad pierna", price: 220, duration: 60, category: "Waxing / Depilation" },
+            { name: "Wax eyebrows / Cera en cejas", price: 100, duration: 40, category: "Waxing / Depilación" },
+            { name: "Wax mustache / Cera en bigote", price: 100, duration: 30, category: "Waxing / Depilación" },
+            { name:"Wax half face", price: 180, duration:30, category: "Waxing / Depilación" },
+            { name: "Wax armpit / Cera en axila", price: 100, duration: 30, category: "Waxing / Depilación" },
+            { name: "Wax full arm / Cera en brazo completo", price: 220, duration: 60, category: "Waxing / Depilación" },
+            { name: "Wax half arm / Cera en mitad brazo", price: 150, duration: 60, category: "Waxing / Depilación" },
+            { name: "Wax stomach / Cera en estómago", price: 60, duration: 60, category: "Waxing / Depilación" },
+            { name: "Wax half back / Cera en mitad espalda", price: 150, duration: 60, category: "Waxing / Depilación" },
+            { name: "Wax bikini / Cera en bikini", price: 200, duration: 60, category: "Waxing / Depilación" },
+            { name: "Wax legs / Cera en piernas", price: 320, duration: 90, category: "Waxing / Depilación" },
+            { name: "Wax half leg / Cera en mitad pierna", price: 220, duration: 60, category: "Waxing / Depilación" },
             { name: "Hair / Cabello", price: 990, duration: 180, category: "Hair / Cabello" },
             { name: "Progressive multivitamin straightening", price: 990, duration: 180, category: "Hair / Cabello" },
             { name: "Straightening reactivator / Reactivador de alisado", price: 350, duration: 90, category: "Hair / Cabello" },
@@ -312,7 +315,17 @@
             {name: "Express hairstyle / Peinado express", price: 200, maxPrice: 300,duration: 90, category: "Hair / Cabello"}
         ];
 
-        const categories = ["General", "Waxing / Depilation", "Hair / Cabello"];
+        const categories = ["General", "Waxing / Depilación", "Hair / Cabello"];
+
+        function priceOf(name) {
+            const chosenService = services.find(function (item) {
+                return item.name === name;
+            });
+            if (chosenService) {
+                return chosenService.price;
+            }
+            return 0;
+        }
 
         const totalProfitDisplay = document.getElementById("total-profit");
 
@@ -474,6 +487,7 @@
         const addAppointmentButton = document.getElementById("add-appointment-button");
         const calendar = document.getElementById("calendar");
         const monthTitle = document.getElementById("month-title");
+        const monthTotal = document.getElementById("month-total");
         const previousMonthButton = document.getElementById("previous-month");
         const nextMonthButton = document.getElementById("next-month");
         let shownMonth = new Date();
@@ -738,6 +752,7 @@
             }
 
             const daysInMonth = new Date(shownMonth.getFullYear(),shownMonth.getMonth() + 1, 0).getDate();
+            let monthMoney = 0;
             for (let day = 1; day <= daysInMonth; day++) {
                 const cell = document.createElement("div");
                 cell.textContent = day;
@@ -761,6 +776,9 @@
                     if (appointment.done) {
                         time.className = "text-[10px] font-normal text-center rounded bg-gray-100 text-gray-400 line-through";
                     }
+                    appointment.services.forEach(function (name) {
+                        monthMoney += priceOf(name);
+                    })
                     cell.appendChild(time);
                 });
 
@@ -769,6 +787,7 @@
                 });
                 calendar.appendChild(cell);
             }
+            monthTotal.textContent = t("monthTotal") + ": $" + monthMoney.toFixed(2);
         }
 
         function pickDay(date) {
@@ -866,7 +885,8 @@
                     block.appendChild(top);
 
                     const spanishNames = appointment.services.map(function (service) {
-                        return service.split(" / ").pop();
+                        return localName(service);
+                        //return service.split(" / ").pop();
                     });
                     const details = document.createElement("div");
                     details.textContent = spanishNames.join(" + ");
@@ -1235,7 +1255,7 @@
             });
             categories.forEach(function (category){
                 const group = document.createElement("optgroup");
-                group.label = category;
+                group.label = localName(category);
                 select.appendChild(group);
 
                 services.forEach(function (service){
@@ -1248,7 +1268,7 @@
                             priceText = "$" + service.price + "-$" + service.maxPrice;
                         } 
 
-                        option.textContent = service.name + " - " + priceText + " MXN";
+                        option.textContent = localName(service.name) + " - " + priceText + " MXN";
                         group.appendChild(option);
                     
                     }
