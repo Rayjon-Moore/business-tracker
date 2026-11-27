@@ -21,7 +21,7 @@
         }
     </script>
 </head>
-<body class="bg-page p-4">
+<body class="bg-page p-4 pb-28">
   <div id="hero" class="relative bg-cover bg-center rounded-xl flex items-center justify-center transition-all duration-100" style="background-image: url('hero.jpg'); height: 320px;">
     <select id="language-select" class="absolute top-3 right-3 bg-white/90 text-brand font-bold border border-line rounded-lg px-2 py-1">
        <option value="es">Español</option> 
@@ -31,7 +31,7 @@
   </div>
     <p><a href="https://wa.me/523318527628?text=Hi!%20can%20I%20book%20an%20appointment." target="_blank">Book via WhatsApp / Reservar por WhatsApp</a></p>
 
-    <section class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
+    <section data-page="appointments" class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
         <h2 data-text="appointments">Appointments / Citas</h2>
         <form class="flex flex-col gap-4">
             <label for="appointment-client" data-text="client">Client / Cliente:</label>
@@ -87,7 +87,7 @@
         <button id="book-day-button" data-text="bookThisDay" class="hidden w-full mt-3 bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Book this day / Agendar este día</button>
         <ul id="appointment-list"></ul>
     </section>
-    <section class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
+    <section data-page="clients" class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
         <h2 data-text="clients">Clients / Clientes</h2>
         <form class="flex flex-col gap-4">
             <label for="client-name" data-text="clientName">Client name / Nombre del cliente:</label>
@@ -107,7 +107,7 @@
     </section>
 
 
-    <section class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
+    <section data-page="stock" class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
         <h2>Stock / Inventario</h2>
         <form class="flex flex-col gap-4">
             <label for="stock-name">Item / Artículo:</label>
@@ -122,7 +122,7 @@
         <ul id="stock-list"></ul>
     </section>
 
-    <section class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
+    <section data-page="money" class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
         <h2>Money / Dinero</h2>
         <form class="flex flex-col gap-4">
                 <label for="service-select">Quick-select a service / Seleccionar servicio:</label>
@@ -141,7 +141,7 @@
         <p>Total Money / Dinero Total: $<span id="total-income">0.00</span></p>
     </section>
 
-    <section class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
+    <section data-page="money" class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
         <h2>Expenses / Gastos</h2>
         <form class="flex flex-col gap-4">
             <label for="expense-description">Description / Descripción:</label>
@@ -156,10 +156,17 @@
         <p>Total Expenses / Gastos Totales: $<span id="total-expense">0.00</span></p>
     </section>
 
-    <section class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
+    <section data-page="money" class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
         <h2>Profit / Ganancia</h2>
         <p>Total Profit / Ganancia Total: $<span id="total-profit">0.00</span></p>
     </section>
+
+    <nav class="fixed bottom-0 left-0 right-0 z-10 bg-white border-t border-line flex justify-around pt-2 pb-4">
+        <button data-show="appointments" class="flex flex-col items-center text-xs font-bold text-gray-400"><span class="text-2xl">📅</span><span data-text="appointments">Appointments / Citas</span></button>
+        <button data-show="clients" class="flex flex-col items-center text-xs font-bold text-gray-400"><span class="text-2xl">👤</span><span data-text="clients">Clients / Clientes</span></button>
+        <button data-show="money" class="flex flex-col items-center text-xs font-bold text-gray-400"><span class="text-2xl">💰</span><span data-text="money">Money / Dinero</span></button>
+        <button data-show="stock" class="flex flex-col items-center text-xs font-bold text-gray-400"><span class="text-2xl">📦</span><span data-text="stock">Stock / Inventario</span></button>
+    </nav>
 
 
     <script>
@@ -200,6 +207,8 @@
                 month: "Month",
                 week: "Week",
                 monthTotal: "Month total",
+                money: "Money",
+                stock: "Stock",
                 bookThisDay: "Book this day",
                 remind: "Remind",
                 done: "Done",
@@ -244,6 +253,8 @@
                 month: "Mes",
                 week: "Semana",
                 monthTotal: "Total del mes",
+                money: "Dinero",
+                stock: "Inventario",
                 bookThisDay: "Agendar este día",
                 remind: "Recordar",
                 done: "Terminada",
@@ -1402,6 +1413,35 @@
             const profit = totalIncome - totalExpense;
             totalProfitDisplay.textContent = profit.toFixed(2);
         }
+
+        // ----- Pages -----
+        function showPage(name) {
+            document.querySelectorAll("[data-page]").forEach(function (section) {
+                if (section.dataset.page === name) {
+                    section.classList.remove("hidden");
+                } else {
+                    section.classList.add("hidden");
+                }
+            });
+            document.querySelectorAll("[data-show]").forEach(function (button) {
+                if (button.dataset.show === name) {
+                    button.classList.add("text-accent");
+                    button.classList.remove("text-gray-400");
+                } else {
+                    button.classList.add("text-gray-400");
+                    button.classList.remove("text-accent");
+                }
+            });
+        }
+
+        document.querySelectorAll("[data-show]").forEach(function (button) {
+            button.addEventListener("click", function () {
+                showPage(button.dataset.show);
+                window.scrollTo(0, 0);
+            });
+        });
+
+        showPage("appointments");
 
         // ----- Hero image shrink effect -----
         const hero = document.getElementById("hero");
