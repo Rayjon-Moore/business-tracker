@@ -32,25 +32,6 @@
     <p><a href="https://wa.me/523318527628?text=Hi!%20can%20I%20book%20an%20appointment." target="_blank">Book via WhatsApp / Reservar por WhatsApp</a></p>
 
     <section class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
-        <h2 data-text="clients">Clients / Clientes</h2>
-        <form class="flex flex-col gap-4">
-            <label for="client-name" data-text="clientName">Client name / Nombre del cliente:</label>
-            <input type="text" id="client-name" class="w-full border border-line rounded-lg p-3">
-            <label for="client-phone" data-text="phone">Phone / Teléfono:</label>
-            <input type="tel" id="client-phone" class="w-full border border-line rounded-lg p-3">
-            <label for="client-notes" data-text="notes">Notes / Notas:</label>
-            <textarea id="client-notes" class="w-full border border-line rounded-lg p-3"></textarea>
-            <button id="add-client-button" data-text="addClient" class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Add client / Agregar cliente</button>
-            <button id="cancel-client-button" data-text="cancel" class="hidden w-full bg-white text-brand border border-line font-bold py-3 px-4 rounded-lg hover:opacity-90">Cancel / Cancelar</button>
-            <p id="client-error" class="text-red-600"></p>
-        </form>
-        <details class="mt-4">
-            <summary id="clients-summary" class="cursor-pointer bg-white text-brand border border-line font-bold py-2 px-4 rounded-lg">Saved clients / Clientes guardados</summary>
-            <ul id="client-list"></ul>
-        </details>
-    </section>
-
-    <section class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
         <h2 data-text="appointments">Appointments / Citas</h2>
         <form class="flex flex-col gap-4">
             <label for="appointment-client" data-text="client">Client / Cliente:</label>
@@ -71,6 +52,9 @@
 
             <label for="appointment-time" data-text="time">Time / Hora:</label>
             <input type="time" id="appointment-time" class="w-full border border-line rounded-lg p-3">
+
+            <label for="appointment-price" data-text="price">price / Precio</label>
+            <input type="number" id="appointment-price" min="0" step="0.01" class="w-full border border-line rounded-lg p-3">
 
             <label for="appointment-deposit" data-text="deposit">Deposit / Depósito:</label>
             <input type="number" id="appointment-deposit" min="0" step="0.01" class="w-full border border-line rounded-lg p-3">
@@ -103,6 +87,25 @@
         <button id="book-day-button" data-text="bookThisDay" class="hidden w-full mt-3 bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Book this day / Agendar este día</button>
         <ul id="appointment-list"></ul>
     </section>
+    <section class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
+        <h2 data-text="clients">Clients / Clientes</h2>
+        <form class="flex flex-col gap-4">
+            <label for="client-name" data-text="clientName">Client name / Nombre del cliente:</label>
+            <input type="text" id="client-name" class="w-full border border-line rounded-lg p-3">
+            <label for="client-phone" data-text="phone">Phone / Teléfono:</label>
+            <input type="tel" id="client-phone" class="w-full border border-line rounded-lg p-3">
+            <label for="client-notes" data-text="notes">Notes / Notas:</label>
+            <textarea id="client-notes" class="w-full border border-line rounded-lg p-3"></textarea>
+            <button id="add-client-button" data-text="addClient" class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg hover:opacity-90">Add client / Agregar cliente</button>
+            <button id="cancel-client-button" data-text="cancel" class="hidden w-full bg-white text-brand border border-line font-bold py-3 px-4 rounded-lg hover:opacity-90">Cancel / Cancelar</button>
+            <p id="client-error" class="text-red-600"></p>
+        </form>
+        <details class="mt-4">
+            <summary id="clients-summary" class="cursor-pointer bg-white text-brand border border-line font-bold py-2 px-4 rounded-lg">Saved clients / Clientes guardados</summary>
+            <ul id="client-list"></ul>
+        </details>
+    </section>
+
 
     <section class="bg-surface rounded-xl shadow-md p-6 mb-6 max-w-xl mx-auto">
         <h2>Stock / Inventario</h2>
@@ -191,6 +194,7 @@
                 date: "Date",
                 time: "Time",
                 deposit: "Deposit",
+                price: "Price (optional)",
                 addAppointment: "Add appointment",
                 updateAppointment: "Update appointment",
                 month: "Month",
@@ -234,6 +238,7 @@
                 date: "Fecha",
                 time: "Hora",
                 deposit: "Depósito",
+                price: "Precio (opcional)",
                 addAppointment: "Agregar cita",
                 updateAppointment: "Actualizar cita",
                 month: "Mes",
@@ -510,6 +515,7 @@
         const appointmentDateInput = document.getElementById("appointment-date");
         const appointmentTimeInput = document.getElementById("appointment-time");
         const appointmentDepositInput = document.getElementById("appointment-deposit");
+        const appointmentPriceInput = document.getElementById("appointment-price");
         const appointmentList = document.getElementById("appointment-list");
         const appointmentError = document.getElementById("appointment-error");
         const extraServices = document.getElementById("extra-services");
@@ -690,6 +696,7 @@
                     appointmentDateInput.value = line.date;
                     appointmentTimeInput.value = line.start;
                     appointmentDepositInput.value = line.deposit || "";
+                    appointmentPriceInput.value = line.price || "";
                     editingAppointment = line;
                     addAppointmentButton.textContent = t("updateAppointment");
                     cancelAppointmentButton.classList.remove("hidden");
@@ -776,9 +783,17 @@
                     if (appointment.done) {
                         time.className = "text-[10px] font-normal text-center rounded bg-gray-100 text-gray-400 line-through";
                     }
-                    appointment.services.forEach(function (name) {
+                    if (appointment.price > 0) {
+                        monthMoney += appointment.price;
+                    } else {
+                        appointment.services.forEach(function (name) {
+                            monthMoney += priceOf(name);
+                        })
+                    }        
+               /*     appointment.services.forEach(function (name) {
                         monthMoney += priceOf(name);
                     })
+                }*/
                     cell.appendChild(time);
                 });
 
@@ -968,6 +983,7 @@
             const date = appointmentDateInput.value;
             const time = appointmentTimeInput.value;
             const deposit = appointmentDepositInput.value;
+            const price = appointmentPriceInput.value;
 
             if (client !== "" && serviceNames.length > 0 && date !== "" && time !== "") {
                 let totalDuration = 0;
@@ -1015,6 +1031,7 @@
                     date: date,
                     start: time,
                     end: endTime,
+                    price: parseFloat(price) || 0,
                     deposit: parseFloat(deposit) || 0
                 };
 
@@ -1053,6 +1070,7 @@
                 appointmentDateInput.value = "";
                 appointmentTimeInput.value = "";
                 appointmentDepositInput.value = "";
+                appointmentPriceInput.value = "";
 
                 appointmentError.textContent = "";
             } else {
@@ -1073,6 +1091,7 @@
             appointmentDateInput.value = "";
             appointmentTimeInput.value = "";
             appointmentDepositInput.value = "";
+            appointmentPriceInput.value = "";
             appointmentError.textContent = "";
         });
 
